@@ -25,7 +25,7 @@ namespace CodingKata.Tests
             var dateTime = new DateTimeOffset(2021, 1, 1, hour.Value, 0, 0, 0, TimeSpan.Zero);
             var berlinTime = new BerlinClockTime(dateTime);
             var formatted = berlinTime.ToString("H", formatter);
-            Assert.AreEqual(hour.Key, formatted);
+            Assert.AreEqual(hour.Key.Replace("\r\n", Environment.NewLine), formatted);
         }
 
         [Test]
@@ -34,13 +34,13 @@ namespace CodingKata.Tests
             var dateTime = new DateTimeOffset(2021, 1, 1, 0, 0, 0, TimeSpan.Zero);
             var berlinTime = new BerlinClockTime(dateTime);
             var formatted = berlinTime.ToString("S", formatter);
-            Assert.AreEqual("Y\r\n", formatted);
+            Assert.AreEqual($"Y{Environment.NewLine}", formatted);
 
 
             var dateTimeNonBlinking = new DateTimeOffset(2021, 1, 1, 0, 0, 1, TimeSpan.Zero);
             var berlinTimeNonBlinking = new BerlinClockTime(dateTimeNonBlinking);
             var formattedNonBlinking = berlinTimeNonBlinking.ToString("S", formatter);
-            Assert.AreEqual("O\r\n", formattedNonBlinking);
+            Assert.AreEqual($"O{Environment.NewLine}", formattedNonBlinking);
         }
 
         [Test]
