@@ -25,7 +25,7 @@ namespace CodingKata.Tests
             var dateTime = new DateTimeOffset(2021, 1, 1, hour.Value, 0, 0, 0, TimeSpan.Zero);
             var berlinTime = new BerlinClockTime(dateTime);
             var formatted = berlinTime.ToString("H", formatter);
-            Assert.AreEqual(hour.Key.Replace("\r\n", Environment.NewLine), formatted);
+            Assert.AreEqual(hour.Key.Replace(Environment.NewLine, Environment.NewLine), formatted);
         }
 
         [Test]
@@ -51,8 +51,8 @@ namespace CodingKata.Tests
                 var dateTime = new DateTimeOffset(2021, 1, 1, 0, i, 0, TimeSpan.Zero);
                 var berlinTime = new BerlinClockTime(dateTime);
                 var formatted = berlinTime.ToString("M", formatter);
-                var lastLine = formatted.Split("\r\n").Skip(1).First();
-                Assert.AreEqual(lastLine.Length, 4);
+                var lastLine = formatted.Split(Environment.NewLine).Skip(1).First();
+                Assert.AreEqual(4, lastLine.Length);
                 var activeCount = lastLine.Count(x => x == 'Y');
                 Assert.AreEqual(activeCount, i % 5);
                 Assert.AreEqual(lastLine.Count(x => x == 'O'), 4-activeCount);
@@ -67,8 +67,8 @@ namespace CodingKata.Tests
                 var dateTime = new DateTimeOffset(2021, 1, 1, 0, i, 0, TimeSpan.Zero);
                 var berlinTime = new BerlinClockTime(dateTime);
                 var formatted = berlinTime.ToString("M", formatter);
-                var lastLine = formatted.Split("\r\n").First();
-                Assert.AreEqual(lastLine.Length, 11);
+                var lastLine = formatted.Split(Environment.NewLine).First();
+                Assert.AreEqual(11, lastLine.Length);
                 var redCount = lastLine.Count(x => x == 'R');
                 Assert.AreEqual(redCount, i / 15);
                 var yellowCount = lastLine.Count(x => x == 'Y');
