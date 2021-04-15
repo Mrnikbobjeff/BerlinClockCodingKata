@@ -1,22 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace CodingKata
 {
-    static class LinqExtensions
-    {
-        public static string TryAggregate(this IEnumerable<string> values)
-        {
-            if (!values.Any())
-            {
-                return string.Empty;
-            }
-            return values.Aggregate((x, y) => x + y);
-        }
-    }
-
     public class BerlinClockTimeFormatter : IFormatProvider, ICustomFormatter
     {
         StringBuilder AppendQuarters(StringBuilder sb, BerlinClockTime clock)
@@ -82,40 +69,6 @@ namespace CodingKata
                 return this;
             else
                 return null;
-        }
-
-        public class BerlinClockTime : IFormattable
-        {
-            public BerlinClockTime(DateTimeOffset offset)
-            {
-                // when the second is odd the light is off
-                IsTwoSecondClockBlinking = offset.Second % 2 == 0;
-
-                // How many five hour blocks exist
-                NumberOfFiveHourSignals = offset.Hour / 5;
-                //How many remaining single hour blocks exist
-                NumberOfOneHourSignals = offset.Hour - NumberOfFiveHourSignals * 5;
-
-                //How Many 15 minute blocks have passed
-                Quarters = offset.Minute / 15;
-                //How Many remaining five minute blocks are there
-                FiveMinutes = (offset.Minute - 15 * Quarters) / 5;
-                //How many single minute blocks are remaining
-                SingleMinutes = offset.Minute % 5;
-            }
-
-            public bool IsTwoSecondClockBlinking { get; }
-            public int NumberOfFiveHourSignals { get; }
-            public int NumberOfOneHourSignals { get; }
-            public int Quarters { get; }
-            public int FiveMinutes { get; }
-            public int SingleMinutes { get; }
-
-            public string ToString(string format, IFormatProvider formatProvider)
-            {
-                var formatter = (formatProvider.GetFormat(typeof(ICustomFormatter)) as ICustomFormatter);
-                return formatter.Format(format, this, formatProvider);
-            }
         }
     }
 }

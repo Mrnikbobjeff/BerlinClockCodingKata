@@ -1,5 +1,4 @@
 ﻿using System;
-using static CodingKata.BerlinClockTimeFormatter;
 
 namespace CodingKata
 {
@@ -22,6 +21,7 @@ namespace CodingKata
             }
             var berlinTime = new BerlinClockTime(time);
             Console.WriteLine(berlinTime.ToString("F", new BerlinClockTimeFormatter()));
+            Console.ReadKey();
         }
     }
 }
