@@ -6,5 +6,5 @@ Code duplication can be reduced even more in formatter by creating an appendRepe
 
 String size is known beforehad from format specifier and platform. for maximum efficiency remove link parts and add a manual counter to set characters based on offset. Requires only one allocation in total for the string.
 
-##Remarks
+## Remarks
 Leap seconds result in two consecutive seconds of glowing. Nothing was specified there so this was deemed acceptable.
