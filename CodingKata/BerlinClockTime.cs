@@ -2,8 +2,10 @@
 
 namespace CodingKata
 {
-    public class BerlinClockTime : IFormattable
+    public readonly struct BerlinClockTime : IFormattable, IEquatable<BerlinClockTime>
     {
+        public DateTimeOffset Offset { get; }
+
         public BerlinClockTime(DateTimeOffset offset)
         {
             // when the second is odd the light is off
@@ -20,6 +22,7 @@ namespace CodingKata
             FiveMinutes = (offset.Minute - 15 * Quarters) / 5;
             //How many single minute blocks are remaining
             SingleMinutes = offset.Minute % 5;
+            Offset = offset;
         }
 
         public bool IsTwoSecondClockBlinking { get; }
@@ -28,6 +31,11 @@ namespace CodingKata
         public int Quarters { get; }
         public int FiveMinutes { get; }
         public int SingleMinutes { get; }
+
+        public bool Equals(BerlinClockTime other)
+        {
+            return Offset.Equals(other);
+        }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {

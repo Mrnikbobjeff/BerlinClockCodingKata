@@ -9,8 +9,14 @@ namespace CodingKata.Tests
     {
         readonly BerlinClockTimeFormatter formatter = new BerlinClockTimeFormatter();
 
+        DateTimeOffset CreateDateTime(int hour = 0, int minute = 0, int second = 0)
+            => new DateTimeOffset(2021, 1, 1, hour, minute, second, TimeSpan.Zero);
+
+        string CreateFormattedString(string format, DateTimeOffset offset)
+            => formatter.Format(format, new BerlinClockTime(offset), formatter);
+
         [DatapointSource]
-        public KeyValuePair<string, int>[] hours = new KeyValuePair<string, int>[]
+        public KeyValuePair<string, int>[] hourPairs = new KeyValuePair<string, int>[]
        {
             new KeyValuePair<string, int>("OOOO\r\nOOOO\r\n", 0), new KeyValuePair<string, int>("OOOO\r\nROOO\r\n", 1), new KeyValuePair<string, int>("OOOO\r\nRROO\r\n", 2), new KeyValuePair<string, int>("OOOO\r\nRRRO\r\n", 3),new KeyValuePair<string, int>( "OOOO\r\nRRRR\r\n", 4),
             new KeyValuePair<string, int>("ROOO\r\nOOOO\r\n", 5), new KeyValuePair<string, int>("ROOO\r\nROOO\r\n", 6), new KeyValuePair<string, int>("ROOO\r\nRROO\r\n", 7), new KeyValuePair<string, int>("ROOO\r\nRRRO\r\n", 8),new KeyValuePair<string, int>( "ROOO\r\nRRRR\r\n", 9),
@@ -20,26 +26,19 @@ namespace CodingKata.Tests
        };
 
         [Theory]
-        public void TestHours(KeyValuePair<string, int> hour)
+        public void TestHours(KeyValuePair<string, int> hourPair)
         {
-            var dateTime = new DateTimeOffset(2021, 1, 1, hour.Value, 0, 0, 0, TimeSpan.Zero);
-            var berlinTime = new BerlinClockTime(dateTime);
-            var formatted = berlinTime.ToString("H", formatter);
-            Assert.AreEqual(hour.Key.Replace("\r\n", Environment.NewLine), formatted);
+            var formatted = CreateFormattedString("H", CreateDateTime(hour: hourPair.Value));
+            Assert.AreEqual(hourPair.Key.Replace("\r\n", Environment.NewLine), formatted);
         }
 
         [Test]
         public void TestSeconds()
         {
-            var dateTime = new DateTimeOffset(2021, 1, 1, 0, 0, 0, TimeSpan.Zero);
-            var berlinTime = new BerlinClockTime(dateTime);
-            var formatted = berlinTime.ToString("S", formatter);
+            var formatted = CreateFormattedString("S", CreateDateTime(second: 0));
             Assert.AreEqual($"Y{Environment.NewLine}", formatted);
 
-
-            var dateTimeNonBlinking = new DateTimeOffset(2021, 1, 1, 0, 0, 1, TimeSpan.Zero);
-            var berlinTimeNonBlinking = new BerlinClockTime(dateTimeNonBlinking);
-            var formattedNonBlinking = berlinTimeNonBlinking.ToString("S", formatter);
+            var formattedNonBlinking = CreateFormattedString("S", CreateDateTime(second: 1));
             Assert.AreEqual($"O{Environment.NewLine}", formattedNonBlinking);
         }
 
@@ -48,14 +47,12 @@ namespace CodingKata.Tests
         {
             for (int i = 0; i < 60; i++)
             {
-                var dateTime = new DateTimeOffset(2021, 1, 1, 0, i, 0, TimeSpan.Zero);
-                var berlinTime = new BerlinClockTime(dateTime);
-                var formatted = berlinTime.ToString("M", formatter);
+                var formatted = CreateFormattedString("M", CreateDateTime(minute: i));
                 var lastLine = formatted.Split(Environment.NewLine).Skip(1).First();
                 Assert.AreEqual(4, lastLine.Length);
                 var activeCount = lastLine.Count(x => x == 'Y');
                 Assert.AreEqual(activeCount, i % 5);
-                Assert.AreEqual(lastLine.Count(x => x == 'O'), 4-activeCount);
+                Assert.AreEqual(lastLine.Count(x => x == 'O'), 4 - activeCount);
             }
         }
 
@@ -64,9 +61,7 @@ namespace CodingKata.Tests
         {
             for (int i = 0; i < 60; i++)
             {
-                var dateTime = new DateTimeOffset(2021, 1, 1, 0, i, 0, TimeSpan.Zero);
-                var berlinTime = new BerlinClockTime(dateTime);
-                var formatted = berlinTime.ToString("M", formatter);
+                var formatted = CreateFormattedString("M", CreateDateTime(minute: i));
                 var lastLine = formatted.Split(Environment.NewLine).First();
                 Assert.AreEqual(11, lastLine.Length);
                 var redCount = lastLine.Count(x => x == 'R');
