@@ -25,7 +25,7 @@ namespace CodingKata.Tests
             var dateTime = new DateTimeOffset(2021, 1, 1, hour.Value, 0, 0, 0, TimeSpan.Zero);
             var berlinTime = new BerlinClockTime(dateTime);
             var formatted = berlinTime.ToString("H", formatter);
-            Assert.AreEqual(hour.Key.Replace(Environment.NewLine, Environment.NewLine), formatted);
+            Assert.AreEqual(hour.Key.Replace("\r\n", Environment.NewLine), formatted);
         }
 
         [Test]
